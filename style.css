@@ -1,0 +1,43 @@
+/* 讓頁面置中並移除邊界 */
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #70c5ce; /* 天空藍 */
+    overflow: hidden;
+}
+
+/* 遊戲主視窗 */
+#game-container {
+    width: 400px;
+    height: 600px;
+    background-color: #87ceeb;
+    position: relative;
+    border: 4px solid #333;
+    overflow: hidden;
+}
+
+/* 小鳥樣式 */
+#bird {
+    width: 40px;
+    height: 30px;
+    background-color: yellow;
+    position: absolute;
+    top: 250px; /* 初始位置 */
+    left: 50px;
+    border-radius: 5px;
+}
+
+/* 計分板樣式 */
+#score {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: white;
+    z-index: 10;
+}
