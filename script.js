@@ -1,33 +1,33 @@
-// 1. 取得 HTML 元素
+//  html
 const bird = document.getElementById('bird');
 const gameContainer = document.getElementById('game-container');
 const scoreDisplay = document.getElementById('score');
 
-// 【新增】取得待機平台與提示文字
+// 平台
 const startPlatform = document.getElementById('start-platform');
 const startMessage = document.getElementById('start-message');
 
-// 2. 遊戲狀態與物理變數
+// 物理效果
 let birdY = 250;       
 let velocity = 0;      
-let gravity = 0.25;    // 使用你調整過後比較順暢的重力
+let gravity = 0.25;    
 let jumpStrength = -6; 
 
 let isGameOver = false;
-let isGameStarted = false; // 【新增】遊戲是否已經開始的旗標
+let isGameStarted = false; 
 let score = 0;
 let frames = 0;      
 let pipes = [];      
 
-// 3. 跳躍動作
+// 飛
 function jump() {
     if (isGameOver) return; 
 
-    // 【新增】如果是第一次跳躍，啟動遊戲並隱藏待機平台
+    // 隱藏台
     if (!isGameStarted) {
         isGameStarted = true;
-        startPlatform.style.display = 'none'; // 隱藏木板
-        startMessage.style.display = 'none';  // 隱藏文字
+        startPlatform.style.display = 'none'; 
+        startMessage.style.display = 'none';  
     }
 
     velocity = jumpStrength;
@@ -38,7 +38,7 @@ document.addEventListener('keydown', function(event) {
 });
 gameContainer.addEventListener('mousedown', jump);
 
-// 水管生成工廠函數 (維持不變)
+// 聲水管
 function spawnPipe() {
     const gap = 250; 
     const topPipeHeight = Math.floor(Math.random() * 300) + 50;
@@ -67,21 +67,21 @@ function spawnPipe() {
     });
 }
 
-// 4. 遊戲主迴圈 (Game Loop)
+// 我幹嘛寫備註阿
 function gameLoop() {
     if (isGameOver) {
-        alert(`遊戲結束！\n你的最終分數是：${score}\n按下確定重新開始。`);
+        alert(`\n分數是：${score}\n重新開始。`);
         location.reload(); 
         return; 
     }
 
-    // 【新增】只有在遊戲開始後，才執行物理運算與水管生成
+    
     if (isGameStarted) {
-        // 更新物理運算
+        
         velocity += gravity;
         birdY += velocity;
 
-        // 邊界檢查
+        
         if (birdY > 570) {
             birdY = 570;
             isGameOver = true; 
@@ -91,13 +91,13 @@ function gameLoop() {
             velocity = 0;
         }
 
-        // 每 90 幀生成一對新水管
+        // 150真
         if (frames % 150 === 0) {
             spawnPipe();
         }
         frames++;
 
-        // 遍歷更新所有水管的狀態
+        
         for (let i = pipes.length - 1; i >= 0; i--) {
             let p = pipes[i];
             p.x -= 3; 
@@ -109,7 +109,7 @@ function gameLoop() {
             const topRect = p.topElement.getBoundingClientRect();
             const bottomRect = p.bottomElement.getBoundingClientRect();
 
-            // 碰撞檢查
+            // 碰壁
             if (
                 birdRect.right > topRect.left &&
                 birdRect.left < topRect.right &&
@@ -118,14 +118,14 @@ function gameLoop() {
                 isGameOver = true;
             }
 
-            // 計分邏輯
+            // 計分
             if (p.x + p.width < 50 && !p.passed) {
                 score++;
                 scoreDisplay.innerText = score;
                 p.passed = true;
             }
 
-            // 資源回收
+            // 資源回收 一般垃圾
             if (p.x < -p.width) {
                 p.topElement.remove();
                 p.bottomElement.remove();
@@ -134,11 +134,11 @@ function gameLoop() {
         }
     }
 
-    // 將 Y 座標應用到小鳥身上 (不管遊戲是否開始，小鳥都會渲染在畫面上)
+    // 鳥位置
     bird.style.top = birdY + 'px';
 
     requestAnimationFrame(gameLoop);
 }
 
-// 啟動遊戲迴圈
+// 姑姑嘎嘎
 gameLoop();
