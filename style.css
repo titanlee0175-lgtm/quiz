@@ -41,3 +41,11 @@ body {
     color: white;
     z-index: 10;
 }
+/* 水管基礎樣式 */
+.pipe {
+    width: 50px;
+    background-color: #2ecc71; /* 經典的綠色 */
+    position: absolute;
+    border: 2px solid #000; /* 加上黑邊讓視覺更立體 */
+    box-sizing: border-box;
+}
