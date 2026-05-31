@@ -1,53 +1,134 @@
-// 1. 取得 HTML 元素：讓 JS 能夠控制畫面上的小鳥
+// 1. 取得 HTML 元素
 const bird = document.getElementById('bird');
 const gameContainer = document.getElementById('game-container');
+const scoreDisplay = document.getElementById('score');
 
-// 2. 設定遊戲的物理變數
-let birdY = 250;       // 小鳥初始 Y 座標 (跟 CSS 裡的 top 對應)
-let velocity = 0;      // 小鳥目前的垂直速度
-let gravity = 0.5;     // 重力加速度 (數字越大，掉落越快)
-let jumpStrength = -8; // 跳躍力量 (在網頁座標系中，Y軸往上是負數，往下是正數)
+// 2. 遊戲狀態與物理變數
+let birdY = 250;       
+let velocity = 0;      
+let gravity = 0.5;     
+let jumpStrength = -8; 
 
-// 3. 建立跳躍動作
+// 【新增】遊戲進度變數
+let isGameOver = false;
+let score = 0;
+let frames = 0;      // 記錄遊戲經過的幀數，用來控制水管生成頻率
+let pipes = [];      // 用陣列來儲存目前畫面上的所有水管物件
+
+// 3. 跳躍動作
 function jump() {
-    // 每次跳躍時，直接重置並給予一個向上的速度
+    if (isGameOver) return; // 如果遊戲結束，禁止跳躍
     velocity = jumpStrength;
 }
 
-// 監聽鍵盤事件：按下空白鍵時觸發跳躍
 document.addEventListener('keydown', function(event) {
-    if (event.code === 'Space') {
-        jump();
-    }
+    if (event.code === 'Space') jump();
 });
-
-// 監聽滑鼠事件：點擊遊戲畫面也能跳躍 (方便手機或滑鼠測試)
 gameContainer.addEventListener('mousedown', jump);
+
+// 【新增】水管生成工廠函數
+function spawnPipe() {
+    const gap = 150; // 上下水管之間的空隙高度
+    // 隨機決定上方水管的高度 (限制在 50px 到 350px 之間)
+    const topPipeHeight = Math.floor(Math.random() * 300) + 50;
+    const bottomPipeHeight = 600 - topPipeHeight - gap;
+
+    // 建立上方水管 DOM 節點
+    const topPipe = document.createElement('div');
+    topPipe.classList.add('pipe');
+    topPipe.style.height = topPipeHeight + 'px';
+    topPipe.style.top = '0px';
+    topPipe.style.left = '400px'; // 從視窗最右側開始
+    gameContainer.appendChild(topPipe);
+
+    // 建立下方水管 DOM 節點
+    const bottomPipe = document.createElement('div');
+    bottomPipe.classList.add('pipe');
+    bottomPipe.style.height = bottomPipeHeight + 'px';
+    bottomPipe.style.bottom = '0px';
+    bottomPipe.style.left = '400px';
+    gameContainer.appendChild(bottomPipe);
+
+    // 將這對水管的數據封裝推入陣列，方便後續遍歷運算
+    pipes.push({
+        topElement: topPipe,
+        bottomElement: bottomPipe,
+        x: 400,
+        width: 50,
+        passed: false // 標記是否已經被小鳥飛過（用來計分）
+    });
+}
 
 // 4. 遊戲主迴圈 (Game Loop)
 function gameLoop() {
-    // 物理運算：速度會因為重力不斷累加
+    if (isGameOver) {
+        // 遊戲結束時的處理
+        alert(`遊戲結束！\n你的最終分數是：${score}\n按下確定重新開始。`);
+        location.reload(); // 重新整理網頁來重置狀態
+        return; 
+    }
+
+    // 更新物理運算
     velocity += gravity;
-    // 位移運算：小鳥的位置會因為速度不斷改變
     birdY += velocity;
 
-    // 邊界檢查 (防呆機制)：不讓小鳥飛出畫面或掉落到地下
-    // 容器高度 600px - 小鳥高度 30px = 570px (觸底極限)
+    // 邊界檢查 (防呆機制)
     if (birdY > 570) {
         birdY = 570;
-        velocity = 0; // 撞到底部時速度歸零
+        isGameOver = true; // 觸底直接判定死亡
     }
-    // 天花板極限
     if (birdY < 0) {
         birdY = 0;
         velocity = 0;
     }
-
-    // 5. 將計算好的數據更新到 HTML 畫面上
     bird.style.top = birdY + 'px';
 
-    // 告訴瀏覽器：在畫下一張圖(下一幀)之前，再執行一次 gameLoop
-    // 這會創造出每秒約 60 次的平滑動畫
+    // 【新增】每 90 幀 (約 1.5 秒) 生成一對新水管
+    if (frames % 90 === 0) {
+        spawnPipe();
+    }
+    frames++;
+
+    // 【新增】遍歷更新所有水管的狀態
+    // 使用倒序迴圈 (i--) 遍歷，這樣在陣列中刪除元素時才不會發生索引錯亂
+    for (let i = pipes.length - 1; i >= 0; i--) {
+        let p = pipes[i];
+        p.x -= 3; // 水管向左移動的速度
+
+        p.topElement.style.left = p.x + 'px';
+        p.bottomElement.style.left = p.x + 'px';
+
+        // 碰撞偵測演算法 (AABB - Axis-Aligned Bounding Box)
+        // 取得鳥與水管在瀏覽器畫面中的絕對座標矩形
+        const birdRect = bird.getBoundingClientRect();
+        const topRect = p.topElement.getBoundingClientRect();
+        const bottomRect = p.bottomElement.getBoundingClientRect();
+
+        // 檢查矩形是否重疊
+        if (
+            birdRect.right > topRect.left &&
+            birdRect.left < topRect.right &&
+            (birdRect.top < topRect.bottom || birdRect.bottom > bottomRect.top)
+        ) {
+            isGameOver = true;
+        }
+
+        // 計分邏輯：當水管的右側超過鳥的左側，且尚未計分
+        if (p.x + p.width < 50 && !p.passed) {
+            score++;
+            scoreDisplay.innerText = score;
+            p.passed = true;
+        }
+
+        // 資源回收 (Garbage Collection)：清除超出畫面的水管
+        // 避免 DOM 節點無限增長導致記憶體洩漏與效能崩潰
+        if (p.x < -p.width) {
+            p.topElement.remove();
+            p.bottomElement.remove();
+            pipes.splice(i, 1);
+        }
+    }
+
     requestAnimationFrame(gameLoop);
 }
 
