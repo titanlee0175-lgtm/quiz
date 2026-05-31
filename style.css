@@ -49,3 +49,27 @@ body {
     border: 2px solid #000; /* 加上黑邊讓視覺更立體 */
     box-sizing: border-box;
 }
+/* 【新增】待機平台樣式 */
+#start-platform {
+    width: 100px;
+    height: 20px;
+    background-color: #e67e22; /* 橘色木板外觀 */
+    position: absolute;
+    top: 280px; 
+    left: 20px;
+    border-radius: 5px;
+    border: 2px solid #d35400;
+}
+
+/* 【新增】提示文字樣式 */
+#start-message {
+    position: absolute;
+    top: 180px;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 0 #000; /* 黑色描邊讓文字更清楚 */
+    z-index: 10;
+}
