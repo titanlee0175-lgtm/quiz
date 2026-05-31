@@ -6,8 +6,8 @@ const scoreDisplay = document.getElementById('score');
 // 2. 遊戲狀態與物理變數
 let birdY = 250;       
 let velocity = 0;      
-let gravity = 0.5;     
-let jumpStrength = -8; 
+let gravity = 0.25;     
+let jumpStrength = -6; 
 
 // 【新增】遊戲進度變數
 let isGameOver = false;
