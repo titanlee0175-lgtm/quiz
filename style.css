@@ -1,15 +1,15 @@
-/* 讓頁面置中並移除邊界 */
+/*置中 */
 body {
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #70c5ce; /* 天空藍 */
+    background-color: #70c5ce; 
     overflow: hidden;
 }
 
-/* 遊戲主視窗 */
+/* 視窗 */
 #game-container {
     width: 400px;
     height: 600px;
@@ -19,7 +19,7 @@ body {
     overflow: hidden;
 }
 
-/* 小鳥樣式 */
+/* 鳥 */
 #bird {
     width: 40px;
     height: 30px;
@@ -30,7 +30,7 @@ body {
     border-radius: 5px;
 }
 
-/* 計分板樣式 */
+/* 計分 */
 #score {
     position: absolute;
     top: 20px;
@@ -41,19 +41,19 @@ body {
     color: white;
     z-index: 10;
 }
-/* 水管基礎樣式 */
+/* 水管 */
 .pipe {
     width: 50px;
-    background-color: #2ecc71; /* 經典的綠色 */
+    background-color: #2ecc71; /* 綠 */
     position: absolute;
-    border: 2px solid #000; /* 加上黑邊讓視覺更立體 */
+    border: 2px solid #000; /* 黑邊 */
     box-sizing: border-box;
 }
-/* 【新增】待機平台樣式 */
+/* 平台 */
 #start-platform {
     width: 100px;
     height: 20px;
-    background-color: #e67e22; /* 橘色木板外觀 */
+    background-color: #e67e22; /* 橘 */
     position: absolute;
     top: 280px; 
     left: 20px;
@@ -61,7 +61,7 @@ body {
     border: 2px solid #d35400;
 }
 
-/* 【新增】提示文字樣式 */
+
 #start-message {
     position: absolute;
     top: 180px;
@@ -70,6 +70,6 @@ body {
     font-size: 24px;
     font-weight: bold;
     color: white;
-    text-shadow: 2px 2px 0 #000; /* 黑色描邊讓文字更清楚 */
+    text-shadow: 2px 2px 0 #000; 
     z-index: 10;
 }
