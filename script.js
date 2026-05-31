@@ -1,23 +1,23 @@
-// 1. 取得 HTML 元素
+//  HTML 東西
 const bird = document.getElementById('bird');
 const gameContainer = document.getElementById('game-container');
 const scoreDisplay = document.getElementById('score');
 
-// 2. 遊戲狀態與物理變數
+// 物理常數白癡東西
 let birdY = 250;       
 let velocity = 0;      
 let gravity = 0.25;     
 let jumpStrength = -6; 
 
-// 【新增】遊戲進度變數
+// 得分
 let isGameOver = false;
 let score = 0;
-let frames = 0;      // 記錄遊戲經過的幀數，用來控制水管生成頻率
-let pipes = [];      // 用陣列來儲存目前畫面上的所有水管物件
+let frames = 0;      // 水管出現速度
+let pipes = [];      // 陣列
 
 // 3. 跳躍動作
 function jump() {
-    if (isGameOver) return; // 如果遊戲結束，禁止跳躍
+    if (isGameOver) return; // ban跳躍
     velocity = jumpStrength;
 }
 
@@ -26,19 +26,19 @@ document.addEventListener('keydown', function(event) {
 });
 gameContainer.addEventListener('mousedown', jump);
 
-// 【新增】水管生成工廠函數
+// 水管出現函數
 function spawnPipe() {
-    const gap = 150; // 上下水管之間的空隙高度
-    // 隨機決定上方水管的高度 (限制在 50px 到 350px 之間)
+    const gap = 150; // 水管空隙高度
+ 
     const topPipeHeight = Math.floor(Math.random() * 300) + 50;
     const bottomPipeHeight = 600 - topPipeHeight - gap;
 
-    // 建立上方水管 DOM 節點
+    // 水管 DOM 節點
     const topPipe = document.createElement('div');
     topPipe.classList.add('pipe');
     topPipe.style.height = topPipeHeight + 'px';
     topPipe.style.top = '0px';
-    topPipe.style.left = '400px'; // 從視窗最右側開始
+    topPipe.style.left = '400px'; // 最右側水管出現
     gameContainer.appendChild(topPipe);
 
     // 建立下方水管 DOM 節點
