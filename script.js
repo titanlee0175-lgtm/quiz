@@ -40,7 +40,7 @@ gameContainer.addEventListener('mousedown', jump);
 
 // 水管生成工廠函數 (維持不變)
 function spawnPipe() {
-    const gap = 150; 
+    const gap = 250; 
     const topPipeHeight = Math.floor(Math.random() * 300) + 50;
     const bottomPipeHeight = 600 - topPipeHeight - gap;
 
@@ -92,7 +92,7 @@ function gameLoop() {
         }
 
         // 每 90 幀生成一對新水管
-        if (frames % 90 === 0) {
+        if (frames % 150 === 0) {
             spawnPipe();
         }
         frames++;
