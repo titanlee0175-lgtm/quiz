@@ -28,7 +28,7 @@ gameContainer.addEventListener('mousedown', jump);
 
 // 水管出現函數
 function spawnPipe() {
-    const gap = 150; // 水管空隙高度
+    const gap = 200; // 水管空隙高度
  
     const topPipeHeight = Math.floor(Math.random() * 300) + 50;
     const bottomPipeHeight = 600 - topPipeHeight - gap;
@@ -84,7 +84,7 @@ function gameLoop() {
     bird.style.top = birdY + 'px';
 
     // 【新增】每 90 幀 (約 1.5 秒) 生成一對新水管
-    if (frames % 90 === 0) {
+    if (frames % 150 === 0) {
         spawnPipe();
     }
     frames++;
