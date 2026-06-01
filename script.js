@@ -10,7 +10,7 @@ const startMessage = document.getElementById('start-message');
 // 物理效果
 let birdY = 250;       
 let velocity = 0;      
-let gravity = 0.25;    
+let gravity = 0.35;    
 let jumpStrength = -6; 
 
 let isGameOver = false;
