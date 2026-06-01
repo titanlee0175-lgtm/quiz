@@ -10,7 +10,7 @@ const startMessage = document.getElementById('start-message');
 // 物理效果
 let birdY = 250;       
 let velocity = 0;      
-let gravity = 0.35;    
+let gravity = 0.5;    
 let jumpStrength = -6; 
 
 let isGameOver = false;
@@ -40,7 +40,7 @@ gameContainer.addEventListener('mousedown', jump);
 
 // 聲水管
 function spawnPipe() {
-    const gap = 250; 
+    const gap = 150; 
     const topPipeHeight = Math.floor(Math.random() * 300) + 50;
     const bottomPipeHeight = 600 - topPipeHeight - gap;
 
