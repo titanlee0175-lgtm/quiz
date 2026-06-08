@@ -11,7 +11,7 @@ const startMessage = document.getElementById('start-message');
 let birdY = 250;       
 let velocity = 0;      
 let gravity = 0.5;    
-let jumpStrength = -6; 
+let jumpStrength = -8; 
 
 let isGameOver = false;
 let isGameStarted = false; 
